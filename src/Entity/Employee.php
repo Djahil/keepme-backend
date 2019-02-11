@@ -69,12 +69,12 @@ class Employee
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="employees")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user_id;
+    private $user;
 
 
     public function __construct()
     {
-        $this->user_id = new ArrayCollection();
+        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,14 +154,14 @@ class Employee
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }

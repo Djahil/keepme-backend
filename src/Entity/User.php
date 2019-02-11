@@ -95,7 +95,7 @@ class User implements UserInterface
     private $social;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Employee", mappedBy="user_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Employee", mappedBy="user", orphanRemoval=true)
      */
     private $employees;
 
@@ -302,7 +302,7 @@ class User implements UserInterface
     {
         if (!$this->employees->contains($employee)) {
             $this->employees[] = $employee;
-            $employee->setUserId($this);
+            $employee->setUser($this);
         }
 
         return $this;
@@ -313,8 +313,8 @@ class User implements UserInterface
         if ($this->employees->contains($employee)) {
             $this->employees->removeElement($employee);
             // set the owning side to null (unless already changed)
-            if ($employee->getUserId() === $this) {
-                $employee->setUserId(null);
+            if ($employee->getUser() === $this) {
+                $employee->setUser(null);
             }
         }
 
