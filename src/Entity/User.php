@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ApiResource
  */
 class User implements UserInterface
 {
@@ -19,6 +22,9 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas un email valide."
+     * )
      */
     private $email;
 
@@ -30,21 +36,29 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $nom_entreprise;
 
@@ -59,19 +73,15 @@ class User implements UserInterface
     private $adresse;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
-    private $code_postale;
+    private $code_postal;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $ville;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $pays;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -79,7 +89,7 @@ class User implements UserInterface
     private $site_web;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $social;
 
@@ -221,14 +231,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCodePostale(): ?int
+    public function getCodePostal(): ?int
     {
-        return $this->code_postale;
+        return $this->code_postal;
     }
 
-    public function setCodePostale(int $code_postale): self
+    public function setCodePostal(int $code_postal): self
     {
-        $this->code_postale = $code_postale;
+        $this->code_postal = $code_postal;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -20,18 +21,27 @@ class Employee
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas un email valide."
+     * )
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
-    private $mail;
+    private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -40,11 +50,16 @@ class Employee
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Type(
+     *     type="integer"
+     * )
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $slug;
 
@@ -77,14 +92,14 @@ class Employee
         return $this;
     }
 
-    public function getMail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->mail;
+        return $this->email;
     }
 
-    public function setMail(string $mail): self
+    public function setEmail(string $email): self
     {
-        $this->mail = $mail;
+        $this->email = $email;
 
         return $this;
     }
