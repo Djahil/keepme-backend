@@ -84,7 +84,6 @@ class User implements UserInterface
      */
     private $ville;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -263,18 +262,6 @@ class User implements UserInterface
     public function setVille(string $ville): self
     {
         $this->ville = $ville;
-
-        return $this;
-    }
-
-    public function getPays(): ?string
-    {
-        return $this->pays;
-    }
-
-    public function setPays(string $pays): self
-    {
-        $this->pays = $pays;
 
         return $this;
     }
