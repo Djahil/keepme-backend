@@ -77,10 +77,10 @@ class User implements UserInterface
     private $adresse;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255)
      */
     private $code_postal;
-
+  
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -97,7 +97,8 @@ class User implements UserInterface
     private $social;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Employee", mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Employee", mappedBy="user_id", orphanRemoval=true)
+     * @ORM\Column(nullable=true))
      */
     private $employees;
 
@@ -244,18 +245,23 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCodePostal(): ?int
+    /**
+     * @return mixed
+     */
+    public function getCodePostal()
     {
         return $this->code_postal;
     }
 
-    public function setCodePostal(int $code_postal): self
+    /**
+     * @param mixed $code_postal
+     */
+    public function setCodePostal($code_postal): self
     {
         $this->code_postal = $code_postal;
-
         return $this;
     }
-
+  
     public function getVille(): ?string
     {
         return $this->ville;
