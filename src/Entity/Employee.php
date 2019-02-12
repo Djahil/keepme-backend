@@ -105,6 +105,18 @@ class Employee
         return $this;
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+      
+        return $this
+    }
+
     public function getPoste(): ?string
     {
         return $this->poste;
@@ -113,6 +125,7 @@ class Employee
     public function setPoste(string $poste): self
     {
         $this->poste = $poste;
+
         return $this;
     }
 
@@ -140,27 +153,6 @@ class Employee
         return $this;
     }
 
-
-    /**
-     * Get the value of email
-     */ 
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set the value of email
-     *
-     * @return  self
-     */ 
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
     public function getTelephone(): ?string
     {
         return $this->telephone;
@@ -169,6 +161,7 @@ class Employee
     public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
+
         return $this;
     }
 }

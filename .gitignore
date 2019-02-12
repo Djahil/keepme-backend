@@ -163,3 +163,6 @@ modules.xml
 
 # Sonarlint plugin
  .idea/sonarlint
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
