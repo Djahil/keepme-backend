@@ -113,8 +113,7 @@ class Employee
     public function setEmail(string $email): self
     {
         $this->email = $email;
-      
-        return $this
+        return $this;
     }
 
     public function getPoste(): ?string
