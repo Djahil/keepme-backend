@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Entity;
+//namespace Sluggable\Fixture\Handler;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
@@ -56,6 +58,14 @@ class Employee
      * @ORM\Column(type="string", length=255)
      * @Assert\NotNull
      * @Assert\NotBlank
+     * @Gedmo\Slug(handlers={
+     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
+     *          @Gedmo\SlugHandlerOption(name="relationField", value="user"),
+     *          @Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
+     *          @Gedmo\SlugHandlerOption(name="separator", value="/"),
+     *          @Gedmo\SlugHandlerOption(name="urilize", value=true)
+     *      })
+     * }, separator="", updatable=true, fields={"prenom", "nom"}, unique=true, style="camel")
      */
     private $slug;
 
