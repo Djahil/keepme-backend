@@ -47,6 +47,8 @@ class Employee
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Assert\NotBlank
      */
     private $poste;
 
