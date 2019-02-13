@@ -20,6 +20,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+
         // Création de l'admin
         $admin = new User();
         $admin->setEmail('admin@admin.fr');

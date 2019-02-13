@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +16,14 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    private $passwordEncoder;
+
+    public function __construct(RegistryInterface $registry, UserPasswordEncoderInterface $passwordEncoder)
     {
+
+        $this->passwordEncoder = $passwordEncoder;
         parent::__construct($registry, User::class);
+
     }
 
     // /**
@@ -47,4 +54,39 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * @param $username
+     * @param $password
+     */
+    public function createAdminFromCommand($username, $plainPassword){
+
+        $role [] =  "ROLE_ADMIN";
+        $admin = new User();
+        $adminLn = count($this->findAll());
+        if($adminLn < 1) {
+            $admin->setEmail($username);
+            $admin->setRoles($role);
+            $admin->setNom('Jean');
+            $admin->setPrenom('Vincent');
+            $admin->setNomEntreprise('Blabla');
+            $admin->setLogo('blabla.png');
+            $admin->setCodePostal('69440');
+            $admin->setVille('lulala');
+            $admin->setAdresse('lulali');
+            $admin->setSiteWeb('siteWeb.fr');
+            $admin->setSocial('facebook');
+
+            $encodedPassword = $this->passwordEncoder->encodePassword($admin, $plainPassword);
+            $admin->setPassword($encodedPassword);
+
+            $this->getEntityManager()->persist($admin);
+            $this->getEntityManager()->flush();
+        }else{
+                throw new \RuntimeException("Vous ne pouvez pas rajouter un user \n
+            pour remplacer l'utilisateur,  veuillez vous connecter à phpmyadmin et le supprimer\n
+            puis rejouez la commande");
+            }
+
+    }
 }
