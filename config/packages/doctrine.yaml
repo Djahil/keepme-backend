@@ -27,6 +27,7 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+
             gedmo_sluggable:
                 type: annotation
                 prefix: Gedmo\Sluggable\Entity

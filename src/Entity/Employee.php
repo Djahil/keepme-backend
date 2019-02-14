@@ -64,7 +64,7 @@ class Employee
      *          @Gedmo\SlugHandlerOption(name="separator", value="/"),
      *          @Gedmo\SlugHandlerOption(name="urilize", value=true)
      *      })
-     * }, separator="", updatable=true, fields={"prenom", "nom"}, unique=true, style="camel")
+     * }, separator="-", updatable=true, fields={"prenom", "nom"}, unique=true, style="lowercase")
      */
     private $slug;
 
@@ -142,12 +142,6 @@ class Employee
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {

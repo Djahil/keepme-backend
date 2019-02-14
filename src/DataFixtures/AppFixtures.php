@@ -67,7 +67,6 @@ class AppFixtures extends Fixture
             $employee->setPrenom($faker->name);
             $employee->setEmail($faker->email);
             $employee->setPoste($faker->jobTitle);
-            $employee->setSlug($faker->slug(3));
             $employee->setTelephone($faker->phoneNumber);
             $employee->setUser($faker->randomElement($randomUser));
             $manager->persist($employee);

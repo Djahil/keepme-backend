@@ -138,9 +138,10 @@ class User implements UserInterface
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\InversedRelativeSlugHandler", options={
      *          @Gedmo\SlugHandlerOption(name="relationClass", value="App\Entity\Employee"),
      *          @Gedmo\SlugHandlerOption(name="mappedBy", value="user"),
-     *          @Gedmo\SlugHandlerOption(name="inverseSlugField", value="slug")
+     *          @Gedmo\SlugHandlerOption(name="inverseSlugField", value="slug"),
+     *          @Gedmo\SlugHandlerOption(name="urilize", value=true)
      *      })
-     * }, fields={"nom_entreprise"}, updatable=true, unique=true, style="camel", separator="")
+     * }, fields={"nom_entreprise"}, updatable=true, unique=true, style="lowercase", separator="-")
      */
     private $slug;
 
@@ -375,12 +376,4 @@ class User implements UserInterface
     {
         return $this->slug;
     }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
 }
