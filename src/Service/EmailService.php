@@ -9,7 +9,6 @@
 namespace App\Service;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 
 class EmailService
 {
@@ -19,7 +18,7 @@ class EmailService
 
         $response = $client->request(
             'POST',
-            'http://169.51.4.250/',
+            'http://169.51.4.250/email',
             $data
         );
 

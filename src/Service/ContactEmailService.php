@@ -20,14 +20,14 @@ class ContactEmailService
         $this->emailService = $emailService;
     }
 
-    public function getContactEmailBody()
+    public function getContactEmailBody(String $email, String $body)
     {
         $email = [
             'form_params' => [
-                'from' => 'email@email.fr',
-                'to' => 'hoc2019@ld-web.net',
-                'subject' => 'Merci du contact',
-                'body' => 'Ceci est un test'
+                'from' => 'hoc2019@ld-web.net',
+                'to' => $email,
+                'subject' => 'Merci de nous avoir contacté !',
+                'body' => $body
             ]
         ];
 
