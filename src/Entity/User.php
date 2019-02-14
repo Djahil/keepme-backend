@@ -99,7 +99,35 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Employee", mappedBy="user", orphanRemoval=true)
+     * @ORM\Column(nullable=true))
      */
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Regex(
+     *     pattern="/[0-9]{10}/"
+     * )
+     */
+    private $telephone;
+
+    /**
+     * @return mixed
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
+     * @param mixed $telephone
+     * @return User
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+        return $this;
+    }
+
     private $employees;
 
     /**
