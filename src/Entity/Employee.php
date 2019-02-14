@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity;
-//namespace Sluggable\Fixture\Handler;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
