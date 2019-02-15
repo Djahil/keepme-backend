@@ -34,5 +34,4 @@ class ContactEmailService
         return $this->emailService->sendEmail($email);
     }
 
-    //'EmailTemplate/contact.html.twig';
 }
