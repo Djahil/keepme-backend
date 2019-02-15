@@ -17,21 +17,32 @@ class Validator
         if (empty($username)) {
             throw new InvalidArgumentException('The username can not be empty.');
         }
-        if (1 !== preg_match('/^[a-z_]+$/', $username)) {
-            throw new InvalidArgumentException('The username must contain only lowercase latin characters and underscores.');
+        if (1 !== preg_match('^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$', $username)) {
+            throw new InvalidArgumentException('The username is a mail format');
         }
         return $username;
     }
 
-    public function validatePassword(?string $plainPassword): string
+    public function validatePassword(?string $password): string
     {
-        if (empty($plainPassword)) {
+        if (empty($password)) {
             throw new InvalidArgumentException('The password can not be empty.');
         }
-        if (mb_strlen(trim($plainPassword)) < 6) {
-            throw new InvalidArgumentException('The password must be at least 6 characters long.');
+        if (1 !== preg_match('/[a-zA-Z]+/', $password) && mb_strlen(trim($password)) < 6) {
+            throw new InvalidArgumentException('the password can matches any characters between a-z or A-Z. You can combine as much as you please and it must be at least 6 characters long.');
         }
-        return $plainPassword;
+        return $password;
+    }
+
+    public function validateEmail(?string $email): string
+    {
+        if (empty($email)) {
+            throw new InvalidArgumentException('The email can not be empty.');
+        }
+        if (false === mb_strpos($email, '@')) {
+            throw new InvalidArgumentException('The email should look like a real email.');
+        }
+        return $email;
     }
 
 }
