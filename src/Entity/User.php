@@ -101,6 +101,7 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Employee", mappedBy="user", orphanRemoval=true)
      * @ORM\Column(nullable=true))
      */
+    private $employees;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -109,26 +110,6 @@ class User implements UserInterface
      * )
      */
     private $telephone;
-
-    /**
-     * @return mixed
-     */
-    public function getTelephone()
-    {
-        return $this->telephone;
-    }
-
-    /**
-     * @param mixed $telephone
-     * @return User
-     */
-    public function setTelephone($telephone)
-    {
-        $this->telephone = $telephone;
-        return $this;
-    }
-
-    private $employees;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -273,6 +254,24 @@ class User implements UserInterface
     {
         $this->logo = $logo;
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
+     * @param mixed $telephone
+     * @return User
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
         return $this;
     }
 
