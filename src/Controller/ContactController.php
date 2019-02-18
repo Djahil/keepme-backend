@@ -16,35 +16,39 @@ class ContactController extends AbstractController
      * @param Request $request
      * @return mixed
      * @return Response
-     * @Route("/contactmail", name="contact_mail")
+     * @Route("/contact/mail", name="contact_mail", methods={"POST"})
      */
     public function sendReceiptFromContact(Request $request, EmailService $emailService)
     {
-        $email = "";
+        $to = null;
         $prenom = null;
+        $data=[];
+        $formValues = json_decode($request->getContent(), true);
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
 
         $form->handleRequest($request);
+        $form->submit($formValues);
+
         if ($form->isSubmitted() && $form->isValid()) {
+
             $prenom = $form->get('prenom')->getData();
 
-            $body = $this->render('EmailTemplate/contact.html.twig', [
+            $body = $this->renderView('EmailTemplate/contact.html.twig', [
                 'prenom' => $prenom
             ]);
 
-            $email = [
-                'form_params' => [
-                    'from' => 'hoc2019@ld-web.net',
-                    'to' => $form->get('email')->getData(),
-                    'subject' => 'Merci de nous avoir contacté !',
-                    'body' => $body,
-                ]
-            ];
+            $data =
+                [
+                    "from" => "hoc2019@ld-web.net",
+                    "to" => $form->get('email')->getData(),
+                    "subject" => "Merci de nous avoir contacté !",
+                    "body" => $body,
+                ];
 
         }
 
-        return new Response($emailService->sendEmail($email));
+        return new Response($emailService->sendEmail($data));
     }
 
 }

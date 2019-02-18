@@ -9,6 +9,7 @@
 namespace App\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 
 class EmailService
 {
@@ -16,14 +17,14 @@ class EmailService
     {
         $client = new Client();
 
-        $response = $client->request(
-            'POST',
-            'http://169.51.4.250/email',
-            $data
-        );
+        $headers = ['content-type' => "application/json"];
+        $request = new Request('POST', 'http://169.51.4.250/email', $headers, json_encode($data));
+
+        $response = $client->send($request);
 
         $code = $response->getStatusCode();
 
-        return $code;
+//        return $code;
+        return $response->getBody()->getContents();
     }
 }

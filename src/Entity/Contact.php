@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 
 class Contact
@@ -29,6 +28,10 @@ class Contact
     /**
      * @Assert\NotNull
      * @Assert\NotBlank
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
      */
     private $email;
 
