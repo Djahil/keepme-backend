@@ -28,10 +28,11 @@ class InscriptionType extends AbstractType
             ->add('site_web', TextType::class)
             ->add('social', TextType::class)
             ->add('logo', FileType::class)
-            ->add('password', TextType::class)
-            ->add("s'inscrire", SubmitType::class, [
-                'constraints' => new Valid(),
+            ->add('password', TextType::class, [
+                'empty_data' => '',
+                'required' => false,
             ])
+            ->add("s'inscrire", SubmitType::class)
         ;
     }
 

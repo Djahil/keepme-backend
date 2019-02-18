@@ -23,7 +23,8 @@
         "symfony/stopwatch": "4.2.*",
         "symfony/swiftmailer-bundle": "^3.2",
         "symfony/validator": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+      "ext-json": "*"
     },
     "config": {
         "preferred-install": {
