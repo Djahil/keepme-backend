@@ -14,15 +14,10 @@ class ContactController extends AbstractController
 {
     /**
      * @param Request $request
-     * @return mixed
-     * @return Response
      * @Route("/contact/mail", name="contact_mail", methods={"POST"})
      */
-    public function sendReceiptFromContact(Request $request, EmailService $emailService)
+    public function getContactFormResponse(Request $request, EmailService $emailService)
     {
-        $to = null;
-        $prenom = null;
-        $data=[];
         $formValues = json_decode($request->getContent(), true);
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
@@ -30,25 +25,56 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
         $form->submit($formValues);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $prenom = $form->get('prenom')->getData();
-
-            $body = $this->renderView('EmailTemplate/contact.html.twig', [
-                'prenom' => $prenom
-            ]);
-
-            $data =
-                [
-                    "from" => "hoc2019@ld-web.net",
-                    "to" => $form->get('email')->getData(),
-                    "subject" => "Merci de nous avoir contacté !",
-                    "body" => $body,
-                ];
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $contact = $form->getData();
+            $this->sendContactNotificationToUser($contact, $emailService);
+            $this->sendContactNotificationToAdmin($contact, $emailService);
+            return new Response('200');
         }
+        else
+        {
+            return new Response('Error');
+        }
+    }
 
-        return new Response($emailService->sendEmail($data));
+    protected function sendContactNotificationToUser(Contact $data, EmailService $emailService)
+    {
+        $body = $this->renderView('EmailTemplate/contact.html.twig', [
+            'prenom' => $data->getNom()
+        ]);
+
+        $userMailData =
+            [
+                "from" => "hoc2019@ld-web.net",
+                "to" => $data->getEmail(),
+                "subject" => "Merci de nous avoir contacté !",
+                "body" => $body,
+            ];
+
+        return new Response($emailService->sendEmail($userMailData));
+    }
+
+    protected function sendContactNotificationToAdmin(Contact $data, EmailService $emailService)
+    {
+        $body = $this->renderView('EmailTemplate/adminContact.html.twig', [
+            'nom' => $data->getNom(),
+            'prenom' => $data->getPrenom(),
+            'entreprise' => $data->getEntreprise(),
+            'email' => $data->getEmail(),
+            'objet' => $data->getObjet(),
+            'message' => $data->getMessage()
+        ]);
+
+        $adminMailData =
+            [
+                "from" => $data->getEmail(),
+                "to" => "hoc2019@ld-web.net",
+                "subject" => "Nouveau contact : " . $data->getObjet(),
+                "body" => $body,
+            ];
+
+        return new Response($emailService->sendEmail($adminMailData));
     }
 
 }
