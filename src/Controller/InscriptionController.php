@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\InscriptionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,16 +28,16 @@ class InscriptionController extends AbstractController
 
         $form->handleRequest($request);
 
-        $form->submit($data);
-
-
+        try {
+            $form->submit($data);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'ça ne marche pas']);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user = $form->getData();
             $em->persist($user);
             $em->flush();
-
         }
         $data = $this->get('serializer')->serialize($user, 'json');
 
