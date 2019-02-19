@@ -110,19 +110,6 @@ class User implements UserInterface
      */
     private $telephone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\InversedRelativeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="relationClass", value="App\Entity\Employee"),
-     *          @Gedmo\SlugHandlerOption(name="mappedBy", value="user"),
-     *          @Gedmo\SlugHandlerOption(name="inverseSlugField", value="slug"),
-     *          @Gedmo\SlugHandlerOption(name="urilize", value=true)
-     *      })
-     * }, fields={"nom_entreprise"}, updatable=true, unique=true, style="lowercase", separator="-")
-     */
-    private $slug;
-
     public function __construct()
     {
         $this->employees = new ArrayCollection();
@@ -366,10 +353,5 @@ class User implements UserInterface
         }
 
         return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
     }
 }
