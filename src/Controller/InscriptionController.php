@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class InscriptionController extends AbstractController
 {
@@ -19,9 +20,13 @@ class InscriptionController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function inscription (Request $request, EmailService $mailService): Response
+    public function inscription (Request $request, EmailService $mailService, UserPasswordEncoderInterface $encoder): Response
     {
         $user    = new User();
+
+        $password = '';
+        $encoded = $encoder->encodePassword($user, $password);
+
         $form    = $this->createForm(InscriptionType::class, $user);
         $content = $request->getContent();
         $data    = json_decode($content, true);
@@ -38,6 +43,7 @@ class InscriptionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setLogo('faresse.png');
             $user->setRoles(['ROLE_USER']);
+            $user->setPassword($password);
             $em->persist($user);
             $em->flush();
 
