@@ -32,6 +32,7 @@ class AppFixtures extends Fixture
         $admin->setLogo('house_of_code.png');
         $admin->setAdresse('36 rue Michel Berthet');
         $admin->setCodePostal('69009');
+        $admin->setTelephone('0665656565');
         $admin->setVille('Gorge de Loup');
         $admin->setSiteWeb('http://www.house-of-code.fr');
         $admin->setSocial('Twitter');
@@ -53,6 +54,7 @@ class AppFixtures extends Fixture
         $user->setAdresse($faker->streetAddress);
         $user->setCodePostal($faker->postcode);
         $user->setVille($faker->city);
+        $user->setTelephone($faker->phoneNumber);
         $user->setSiteWeb($faker->url);
         $user->setSocial($faker->url);
         $randomUser[] = $user;
