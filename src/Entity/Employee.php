@@ -55,8 +55,6 @@ class Employee
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull
-     * @Assert\NotBlank
      * @Gedmo\Slug(handlers={
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
      *          @Gedmo\SlugHandlerOption(name="relationField", value="user"),

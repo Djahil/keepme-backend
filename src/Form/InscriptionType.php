@@ -24,22 +24,22 @@ class InscriptionType extends AbstractType
             ->add('nom_entreprise', TextType::class)
             ->add('adresse', TextType::class)
             ->add('ville', TextType::class)
+            ->add('logo')
             ->add('code_postal', TextType::class)
             ->add('site_web', TextType::class)
             ->add('social', TextType::class)
-            ->add('logo', FileType::class)
             ->add('password', TextType::class, [
                 'empty_data' => '',
                 'required' => false,
             ])
-            ->add("s'inscrire", SubmitType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class
+            'data_class' => User::class,
+            'csrf_protection' => false,
         ]);
     }
 }

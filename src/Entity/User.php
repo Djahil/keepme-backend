@@ -37,7 +37,6 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
-
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
@@ -68,7 +67,7 @@ class User implements UserInterface
     private $nom_entreprise;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $logo;
 
@@ -113,8 +112,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull
-     * @Assert\NotBlank
      * @Gedmo\Slug(handlers={
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\InversedRelativeSlugHandler", options={
      *          @Gedmo\SlugHandlerOption(name="relationClass", value="App\Entity\Employee"),
