@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -26,6 +28,7 @@ class UserRepository extends ServiceEntityRepository
 
     }
 
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
@@ -43,17 +46,21 @@ class UserRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
+
+    /**
+     * @param string $id
+     * @return mixed
+     */
+    public function findById(string $id)
+   {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+           ->andWhere('u.id = :id')
+            ->setParameter('id', $id)
+           ->getQuery()
+            ->getOneOrNullResult(Query::HYDRATE_SIMPLEOBJECT)
         ;
-    }
-    */
+   }
+
 
     /**
      * @param $username
@@ -61,7 +68,7 @@ class UserRepository extends ServiceEntityRepository
      */
     public function createAdminFromCommand($username, $plainPassword){
 
-        $role [] =  "ROLE_ADMIN";
+        $role [] =  "ROLE_USER";
         $admin = new User();
         $adminLn = count($this->findAll());
         if($adminLn < 1) {
@@ -76,6 +83,7 @@ class UserRepository extends ServiceEntityRepository
             $admin->setAdresse('lulali');
             $admin->setSiteWeb('siteWeb.fr');
             $admin->setSocial('facebook');
+            $admin->setTelephone('0654875421');
 
             $encodedPassword = $this->passwordEncoder->encodePassword($admin, $plainPassword);
             $admin->setPassword($encodedPassword);
