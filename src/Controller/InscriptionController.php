@@ -37,11 +37,10 @@ class InscriptionController extends AbstractController
         }
 
         // Si le formulaire et submit et valide tu me l'envoi en base de donnée
-        if ($form->isSubmitted() && $form->isValid()) {
-        
-            $user->setLogo('faresse.png');
+        if ($form->isSubmitted() && $form->isValid())
             $user->setRoles(['ROLE_USER']);
             $user->setPassword($encoded);
+
             $em->persist($user);
             $em->flush();
 
