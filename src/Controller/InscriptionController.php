@@ -25,7 +25,7 @@ class InscriptionController extends AbstractController
         $user    = new User();
 
         $password = '';
-        $encoded = $encoder->encodePassword($user, $password);
+
 
         $form    = $this->createForm(InscriptionType::class, $user);
         $content = $request->getContent();
@@ -41,9 +41,9 @@ class InscriptionController extends AbstractController
 
         // Si le formulaire et submit et valide tu me l'envoi en base de donnée
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setLogo('faresse.png');
+            $encodedPassword = $encoder->encodePassword($user, $password);
             $user->setRoles(['ROLE_USER']);
-            $user->setPassword($password);
+            $user->setPassword($encodedPassword);
             $em->persist($user);
             $em->flush();
 

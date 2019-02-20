@@ -57,14 +57,7 @@ class Employee
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="relationField", value="user"),
-     *          @Gedmo\SlugHandlerOption(name="relationSlugField", value="nom_entreprise"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="/"),
-     *          @Gedmo\SlugHandlerOption(name="urilize", value=true)
-     *      })
-     * }, separator="-", updatable=true, fields={"prenom", "nom"}, unique=true, style="lowercase")
+     * @Gedmo\Slug(separator="-", updatable=true, fields={"prenom", "nom", "poste"}, unique=true, style="lowercase")
      */
     private $slug;
 

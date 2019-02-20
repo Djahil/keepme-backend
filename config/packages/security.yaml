@@ -40,6 +40,18 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+        employee_show:
+            pattern:   ^/employee/show
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        employee_list:
+                    pattern:   ^/employee/list
+                    stateless: true
+                    guard:
+                        authenticators:
+                            - lexik_jwt_authentication.jwt_token_authenticator
         employee_delete:
             pattern:   ^/employee/delete
             stateless: true
@@ -48,6 +60,12 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
         employee_update:
             pattern:   ^/employee/update
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        employee_send_card:
+            pattern:   ^/employee/sendcard
             stateless: true
             guard:
                 authenticators:
@@ -72,10 +90,11 @@ security:
       - { path: ^/admin, roles: ROLE_ADMIN }
       - { path: ^/profile, roles: ROLE_USER }
       - { path: ^/employee/add, roles: ROLE_USER }
-      - { path: ^/employee/show, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: ^/employee/list, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/employee/show, roles: ROLE_USER }
+      - { path: ^/employee/list, roles: ROLE_USER }
       - { path: ^/employee/delete, roles: ROLE_USER }
       - { path: ^/employee/update, roles: ROLE_USER }
+      - { path: ^/employee/sendcard, roles: ROLE_USER }
 
 
 

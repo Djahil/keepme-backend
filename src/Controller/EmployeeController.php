@@ -82,19 +82,13 @@ class EmployeeController extends AbstractController
     }
 
     /**
-     * @Route("/show", name="employee_show", methods={"GET"})
+     * @Route("/show/{slug}", name="employee_show", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function getEmployeeBySlug (Request $request, EmployeeRepository $employeeRepository)
+    public function getEmployeeBySlug ($slug, EmployeeRepository $employeeRepository)
     {
-
-        $content = $request->getContent();
-
-        $myData = json_decode($content, true);
-
-        $employee = $employeeRepository->findBy($myData);
-
+        $employee = $employeeRepository->findOneBy(['slug' => $slug]);
 
         $data = $this->get('serializer')->serialize($employee, 'json');
 
@@ -108,7 +102,6 @@ class EmployeeController extends AbstractController
      */
     public function getEmployeesList (EmployeeRepository $employeeRepository)
     {
-
         $employees = $employeeRepository->findAll();
 
 
