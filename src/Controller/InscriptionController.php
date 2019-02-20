@@ -22,16 +22,13 @@ class InscriptionController extends AbstractController
      */
     public function inscription (Request $request, EmailService $mailService, UserPasswordEncoderInterface $encoder): Response
     {
-        $user    = new User();
-
-        $password = '';
-        $encoded = $encoder->encodePassword($user, $password);
-
-        $form    = $this->createForm(InscriptionType::class, $user);
-        $content = $request->getContent();
-        $data    = json_decode($content, true);
-        $em      = $this->getDoctrine()->getManager();
-
+        $user     = new User();
+        $form     = $this->createForm(InscriptionType::class, $user);
+        $content  = $request->getContent();
+        $data     = json_decode($content, true);
+        $em       = $this->getDoctrine()->getManager();
+        $encoded  = $encoder->encodePassword($user, $data['password']);
+        
         // On catch l'erreur si il y'en a une
         try {
             $form->submit($data);
@@ -41,9 +38,10 @@ class InscriptionController extends AbstractController
 
         // Si le formulaire et submit et valide tu me l'envoi en base de donnée
         if ($form->isSubmitted() && $form->isValid()) {
+        
             $user->setLogo('faresse.png');
             $user->setRoles(['ROLE_USER']);
-            $user->setPassword($password);
+            $user->setPassword($encoded);
             $em->persist($user);
             $em->flush();
 
