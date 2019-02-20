@@ -1,6 +1,8 @@
 {
 	"info": {
-		"_postman_id": "5d2b18d7-ef56-42b4-bd75-e5ee9ff0b9f7",
+
+		"_postman_id": "f5e5a8f9-9481-478d-9667-e3162fd9f799",
+
 		"name": "keepme",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -9,14 +11,14 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "inscription user",
+					"name": "addUser",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
+								"value": "application/json",
 								"type": "text"
 							},
 							{
@@ -27,69 +29,8 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "tareq@tareq.com",
-									"type": "text"
-								},
-								{
-									"key": "roles",
-									"value": "ROLE_USER",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "tareq1234",
-									"type": "text"
-								},
-								{
-									"key": "nom",
-									"value": "salem",
-									"type": "text"
-								},
-								{
-									"key": "prenom",
-									"value": "tareq",
-									"type": "text"
-								},
-								{
-									"key": "nom_entreprise",
-									"value": "balaba",
-									"type": "text"
-								},
-								{
-									"key": "logo",
-									"value": "hfhfh.png",
-									"type": "text"
-								},
-								{
-									"key": "adresse",
-									"value": "tatat hha hhh",
-									"type": "text"
-								},
-								{
-									"key": "code_postal",
-									"value": "69254",
-									"type": "text"
-								},
-								{
-									"key": "ville",
-									"value": "labas",
-									"type": "text"
-								},
-								{
-									"key": "site_web",
-									"value": "www.tatat.fr",
-									"type": "text"
-								},
-								{
-									"key": "social",
-									"value": "facebook",
-									"type": "text"
-								}
-							]
+							"mode": "raw",
+							"raw": "{\n\t\"nom\": \"Dupond\",\n\t\"prenom\": \"Jean\",\n\t\"nom_entreprise\": \"CDTS\",\n\t\"telephone\": \"0654315215\",\n\t\"email\": \"jeandupond@cdts.com\",\n\t\"adresse\": \"5 rue de la pignole\",\n\t\"code_postal\": \"69009\",\n\t\"ville\": \"Pignole-sur-ton-nez\",\n\t\"site_web\": \"cdts.com\",\n\t\"password\": \"12345678\",\n\t\"social\": \"facebook.com/cdts\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}/user/add",
@@ -299,11 +240,14 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
+								"value": "application/json",
 								"type": "text"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/user/update",
 							"host": [
@@ -318,14 +262,76 @@
 					"response": []
 				},
 				{
-					"name": "Connexion User",
+					"name": "deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/user/delete/{id}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"delete",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/user/{id}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
+								"value": "application/json",
 								"type": "text"
 							},
 							{
@@ -335,28 +341,17 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "tareq@tareq.la",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "tareq1234",
-									"type": "text"
-								}
-							]
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"jeandupond@cdts.com\",\n\t\"password\": \"12345678\"\n}"
 						},
 						"url": {
-							"raw": "{{url}}/user/login",
+							"raw": "{{url}}/api/login_check",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"user",
-								"login"
+								"api",
+								"login_check"
 							]
 						}
 					},
@@ -368,7 +363,7 @@
 			"name": "Employee",
 			"item": [
 				{
-					"name": "inscription employee",
+					"name": "addEmployee",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -385,8 +380,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -407,7 +402,7 @@
 					"response": []
 				},
 				{
-					"name": "affiche un employee",
+					"name": "getEmployee",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -417,7 +412,46 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NzA3NzksImV4cCI6MTU1MDY3NDM3OSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidGFyZXFAdGFyZXEuY29tIn0.l4hZ6rneJPXsW_VHhF8-XD4IrTwEJbvC4a9Wsl6KCN9rVIwxq3Ffd8-tNgG5SpWxhd_SHopfPhapN1AalV5sWCZ66NqFmGPglV0Louh8t0W_4e7hN77vexRFDDMtvMRYSfTmijnfgIGTuQetLuhSy_7TL9KtEM5UjqXRbjQinV0LV_M_DANw1eoHGxMQj9YA7GfCoF9EF7zpQVJ3l9b-2ezFntxL3z-SdBHsJ1AeJhkXL3PVLiHfSMZlrBgGxZYYnUU39bQ6lO8mB8AjSfD3fMWHxoXxHOCBy_kgpXIgZ9KwZh8XgjoEPCAXamLT70vLiQD6gGtQ0wjURSxJL-MDDrFX9bOsnT4TGwBCSI5qRUNy3gvB6M2nz5Q26vdlRcQeK83ewO2ogNIdk6KFnRceQys_JpLEEUsZGoAwNMak7FddjSJ6Cqtkfti8yqd6-L2UtnliWE1AiOLGz6xv6ig-NOdYI-iu2bPqKYi9gzICdLQXe9G0OrGmsq4nV_Y7ROxoRLofQvZpgS2WrOJubcL8cxsGrg9EUB-w2IQc6JwSmYBLE84QWd1bfR69XQafzxTQWcjRi69u56sHIKGX4DNN6EP4j_WnPhPm3Zsy10eTLRrAt0FFSDZ0jaZvVgWSCkJRJ_zw-7TSVA0x24D-YOCQGxz1P2OlHNy5VHRtGxrayao",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NzcyNDIsImV4cCI6MTU1MDY4MDg0Miwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiamVhbmR1cG9uZEBjZHRzLmNvbSJ9.LzAmcKu_ThqzitvJP_cE1TQvNYjq1R2f2Nk4nSJ7p3hlDRLwg4-27XG-Ivn437Qj8-bkd3g6QBKzop3aX9r2Cp5Puf6V3GKKW9mg8wEzZHWEURldEESybKGGQJH0oC9cp-Oln8waNDfBjy7O3-N-65GXFEbxSR4kcstrL47HUUTMAwaxerl5z6biBiQi7kfK7JL7LXMARBkyydJxG8e2CIHoWHUXu7lzRe2VivBJnXukNe4VhtmRsTN0lX80qJDbQSDJ8YDXofi5V3TwObsO3a5RHvt1KGhurIIgyhS0qR6okyyu0FbhErtM96gBleaw8blSe915ud2B8NTQqYg7LTwSME8zO7-8Wygyb83UucdIWsC_sUF3QI6UrMHqZQarDoI3Q44C3EXCPvs4YZLzDgDnvkYZkBKRhfcmCdpB6xqWJZ-qC7wwUTccItatQ5lFKbU7xM5_ZJssj3tI8nQPpR-Wj97fsoqLkBZ6PUBzOkBfuLuN5KBxCxl57cJRXU-kkCklZqAG5c1egfgT7P34TH7ZaU4rpNfY9JEgUePYhPsm7PGO_o4_kAunmnQ-EvkNMAMxSlq69-ycHy8GpXIqPDQmVBKrYEc5F0tZA25dFRuZcIqGPY63hmWftBaaBp8yDu9zsFMU2uiA16koV-vCW-fK9Ml5vCteeZ2iQwLLehI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nom\": \"jean\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/employee/show",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"employee",
+								"show"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEmployeeCard",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NzcyNDIsImV4cCI6MTU1MDY4MDg0Miwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiamVhbmR1cG9uZEBjZHRzLmNvbSJ9.LzAmcKu_ThqzitvJP_cE1TQvNYjq1R2f2Nk4nSJ7p3hlDRLwg4-27XG-Ivn437Qj8-bkd3g6QBKzop3aX9r2Cp5Puf6V3GKKW9mg8wEzZHWEURldEESybKGGQJH0oC9cp-Oln8waNDfBjy7O3-N-65GXFEbxSR4kcstrL47HUUTMAwaxerl5z6biBiQi7kfK7JL7LXMARBkyydJxG8e2CIHoWHUXu7lzRe2VivBJnXukNe4VhtmRsTN0lX80qJDbQSDJ8YDXofi5V3TwObsO3a5RHvt1KGhurIIgyhS0qR6okyyu0FbhErtM96gBleaw8blSe915ud2B8NTQqYg7LTwSME8zO7-8Wygyb83UucdIWsC_sUF3QI6UrMHqZQarDoI3Q44C3EXCPvs4YZLzDgDnvkYZkBKRhfcmCdpB6xqWJZ-qC7wwUTccItatQ5lFKbU7xM5_ZJssj3tI8nQPpR-Wj97fsoqLkBZ6PUBzOkBfuLuN5KBxCxl57cJRXU-kkCklZqAG5c1egfgT7P34TH7ZaU4rpNfY9JEgUePYhPsm7PGO_o4_kAunmnQ-EvkNMAMxSlq69-ycHy8GpXIqPDQmVBKrYEc5F0tZA25dFRuZcIqGPY63hmWftBaaBp8yDu9zsFMU2uiA16koV-vCW-fK9Ml5vCteeZ2iQwLLehI",
 									"type": "string"
 								}
 							]
@@ -433,16 +467,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"slug\":\"blabla/blabla-fictor-vasresse\"\n}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/employee/show",
+							"raw": "{{url}}/card/christophe-jean-home-de-menage",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"employee",
-								"show"
+								"card",
+								"christophe-jean-home-de-menage"
 							]
 						}
 					},
@@ -459,7 +493,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NzA3NzksImV4cCI6MTU1MDY3NDM3OSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidGFyZXFAdGFyZXEuY29tIn0.l4hZ6rneJPXsW_VHhF8-XD4IrTwEJbvC4a9Wsl6KCN9rVIwxq3Ffd8-tNgG5SpWxhd_SHopfPhapN1AalV5sWCZ66NqFmGPglV0Louh8t0W_4e7hN77vexRFDDMtvMRYSfTmijnfgIGTuQetLuhSy_7TL9KtEM5UjqXRbjQinV0LV_M_DANw1eoHGxMQj9YA7GfCoF9EF7zpQVJ3l9b-2ezFntxL3z-SdBHsJ1AeJhkXL3PVLiHfSMZlrBgGxZYYnUU39bQ6lO8mB8AjSfD3fMWHxoXxHOCBy_kgpXIgZ9KwZh8XgjoEPCAXamLT70vLiQD6gGtQ0wjURSxJL-MDDrFX9bOsnT4TGwBCSI5qRUNy3gvB6M2nz5Q26vdlRcQeK83ewO2ogNIdk6KFnRceQys_JpLEEUsZGoAwNMak7FddjSJ6Cqtkfti8yqd6-L2UtnliWE1AiOLGz6xv6ig-NOdYI-iu2bPqKYi9gzICdLQXe9G0OrGmsq4nV_Y7ROxoRLofQvZpgS2WrOJubcL8cxsGrg9EUB-w2IQc6JwSmYBLE84QWd1bfR69XQafzxTQWcjRi69u56sHIKGX4DNN6EP4j_WnPhPm3Zsy10eTLRrAt0FFSDZ0jaZvVgWSCkJRJ_zw-7TSVA0x24D-YOCQGxz1P2OlHNy5VHRtGxrayao",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NzcyNDIsImV4cCI6MTU1MDY4MDg0Miwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiamVhbmR1cG9uZEBjZHRzLmNvbSJ9.LzAmcKu_ThqzitvJP_cE1TQvNYjq1R2f2Nk4nSJ7p3hlDRLwg4-27XG-Ivn437Qj8-bkd3g6QBKzop3aX9r2Cp5Puf6V3GKKW9mg8wEzZHWEURldEESybKGGQJH0oC9cp-Oln8waNDfBjy7O3-N-65GXFEbxSR4kcstrL47HUUTMAwaxerl5z6biBiQi7kfK7JL7LXMARBkyydJxG8e2CIHoWHUXu7lzRe2VivBJnXukNe4VhtmRsTN0lX80qJDbQSDJ8YDXofi5V3TwObsO3a5RHvt1KGhurIIgyhS0qR6okyyu0FbhErtM96gBleaw8blSe915ud2B8NTQqYg7LTwSME8zO7-8Wygyb83UucdIWsC_sUF3QI6UrMHqZQarDoI3Q44C3EXCPvs4YZLzDgDnvkYZkBKRhfcmCdpB6xqWJZ-qC7wwUTccItatQ5lFKbU7xM5_ZJssj3tI8nQPpR-Wj97fsoqLkBZ6PUBzOkBfuLuN5KBxCxl57cJRXU-kkCklZqAG5c1egfgT7P34TH7ZaU4rpNfY9JEgUePYhPsm7PGO_o4_kAunmnQ-EvkNMAMxSlq69-ycHy8GpXIqPDQmVBKrYEc5F0tZA25dFRuZcIqGPY63hmWftBaaBp8yDu9zsFMU2uiA16koV-vCW-fK9Ml5vCteeZ2iQwLLehI",
 									"type": "string"
 								}
 							]
@@ -491,14 +525,14 @@
 					"response": []
 				},
 				{
-					"name": "supprimer un employee",
+					"name": "deleteEmployee",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NjY0ODYsImV4cCI6MTU1MDY3MDA4Niwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidGFyZXFAdGFyZXEuZnIifQ.Yrm7hxtan-QFt8FfdN9TbjAVtRngSSbcH6X4UCFcZevWwV_iEt2LYnoeE47hEz-1_oPrLVbmgyHZYrrDXb1aBd0yRvCaxeASiuhXC3e5LVFWfEJkJXC2Wx_2vTpez4ubiNYWmALBXgI_POZ5rJB1SoWz5zuz6N-g3vKBSQu2BDDXn7mJm5gaPSi4rQJjBzZ-whErVvaQ4COxdw6iBM3zhrSEJdq5M-DtAdL9Jdw_UH39b7tAX5y_lwIYp1pI8HLq5CUn2djBar_K_zrPp-iScT5kV_3N1Oh7QE5bYmtw9_2sOiK_qFCECwPI5ngXbHxb0ny20W6z17Wyn0YpCAYpQoQReeyPKpWyixXIbgzwrsdVcE4VPWs62JWw2HwDad1jZa_n9tbzeOYtMEPUh3dO3E_6IBtzW3lh6RVOpSppxsu3NZMqvcP95tFb89R9581eTAN9XDYhM5-cMKHZflBPjaHRYm2wV5qz8_qseEvc2ql1NedUFBy9gyW34P_OCUFdddrKupsWl2EtJIKrmDbNqZuzjD3IJleTFjBhh84M5xwJDLf0nvCkFyf7SHj_jgXCXUiuAQnmvMEyDMhbNw7atOjO_yWQpbid03kpq266Gi2D5Y27yVX1y4cfyNxdxO_XIrIqQD3h9a78-B2GUatRPrBCNVHImAkTTrZ_BRa5MRE",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NzcyNDIsImV4cCI6MTU1MDY4MDg0Miwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiamVhbmR1cG9uZEBjZHRzLmNvbSJ9.LzAmcKu_ThqzitvJP_cE1TQvNYjq1R2f2Nk4nSJ7p3hlDRLwg4-27XG-Ivn437Qj8-bkd3g6QBKzop3aX9r2Cp5Puf6V3GKKW9mg8wEzZHWEURldEESybKGGQJH0oC9cp-Oln8waNDfBjy7O3-N-65GXFEbxSR4kcstrL47HUUTMAwaxerl5z6biBiQi7kfK7JL7LXMARBkyydJxG8e2CIHoWHUXu7lzRe2VivBJnXukNe4VhtmRsTN0lX80qJDbQSDJ8YDXofi5V3TwObsO3a5RHvt1KGhurIIgyhS0qR6okyyu0FbhErtM96gBleaw8blSe915ud2B8NTQqYg7LTwSME8zO7-8Wygyb83UucdIWsC_sUF3QI6UrMHqZQarDoI3Q44C3EXCPvs4YZLzDgDnvkYZkBKRhfcmCdpB6xqWJZ-qC7wwUTccItatQ5lFKbU7xM5_ZJssj3tI8nQPpR-Wj97fsoqLkBZ6PUBzOkBfuLuN5KBxCxl57cJRXU-kkCklZqAG5c1egfgT7P34TH7ZaU4rpNfY9JEgUePYhPsm7PGO_o4_kAunmnQ-EvkNMAMxSlq69-ycHy8GpXIqPDQmVBKrYEc5F0tZA25dFRuZcIqGPY63hmWftBaaBp8yDu9zsFMU2uiA16koV-vCW-fK9Ml5vCteeZ2iQwLLehI",
 									"type": "string"
 								}
 							]
@@ -530,14 +564,14 @@
 					"response": []
 				},
 				{
-					"name": "update employee",
+					"name": "updateEmployee",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2NzA3NzksImV4cCI6MTU1MDY3NDM3OSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidGFyZXFAdGFyZXEuY29tIn0.l4hZ6rneJPXsW_VHhF8-XD4IrTwEJbvC4a9Wsl6KCN9rVIwxq3Ffd8-tNgG5SpWxhd_SHopfPhapN1AalV5sWCZ66NqFmGPglV0Louh8t0W_4e7hN77vexRFDDMtvMRYSfTmijnfgIGTuQetLuhSy_7TL9KtEM5UjqXRbjQinV0LV_M_DANw1eoHGxMQj9YA7GfCoF9EF7zpQVJ3l9b-2ezFntxL3z-SdBHsJ1AeJhkXL3PVLiHfSMZlrBgGxZYYnUU39bQ6lO8mB8AjSfD3fMWHxoXxHOCBy_kgpXIgZ9KwZh8XgjoEPCAXamLT70vLiQD6gGtQ0wjURSxJL-MDDrFX9bOsnT4TGwBCSI5qRUNy3gvB6M2nz5Q26vdlRcQeK83ewO2ogNIdk6KFnRceQys_JpLEEUsZGoAwNMak7FddjSJ6Cqtkfti8yqd6-L2UtnliWE1AiOLGz6xv6ig-NOdYI-iu2bPqKYi9gzICdLQXe9G0OrGmsq4nV_Y7ROxoRLofQvZpgS2WrOJubcL8cxsGrg9EUB-w2IQc6JwSmYBLE84QWd1bfR69XQafzxTQWcjRi69u56sHIKGX4DNN6EP4j_WnPhPm3Zsy10eTLRrAt0FFSDZ0jaZvVgWSCkJRJ_zw-7TSVA0x24D-YOCQGxz1P2OlHNy5VHRtGxrayao",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NTA2Nzk3MDIsImV4cCI6MTU1MDY4MzMwMiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiamVhbmR1cG9uZEBjZHRzLmNvbSJ9.c6zP0fWBC08McEhriB2YLX3aqfXC-_7M5nRDMekb5W0Peu-7HB871srbJ164pGrDdGE-dTJFBjLZ4EP3cGGsJeJ7y1hiPvJ6uEmEVAGl1uxTm9fLAMlP70ARaDAENSij_u4RzKrjwImQzXc1ujJwISBI37EcJw9ku7ivHqBbh5bdtkUCwZOLtqqIYreWKIC7WxYZnrpZ8K5Jtbl0xcmmS2mr7DjkxbBNNYkyLV120Pj9A27ZmngyUaJcGkTIr6hjbeFL8fP1Q9G1VB53WxBqbAioiimG8diKE5oxsIEaTv36IcE15FfK-bJkGP1M9BUDee4ceYEbbXFzS7a2YZD1sk6RZUfyy3fFtv382ohvvHYDDlZlIGIENqsnr7g5FWBFyIpCes_oL-kRgzCRWMtL-Esoq4FDcihUZoOjc0uKH2QMb6jDGb2LXY9lgw6CX5BfPB29m38VBN8C4sn55crNIb4CMF_PU8ZwK_XDiRoczHHCQEb2Q4DGdl_X1xAdKFBLJ-OeClKxGwD3-VaK1kqDX3w8MxZphLYeon41ByxdlBSG9hb2xd0SkK5h5565mIGbDXHrj0qJdVQj-beBI2ENWWt5n5KgEVPtZm-Qipn5FPPI9rtuCCAN_eGy4kVCWjkjgmxN-uJPfmHGZybqALjRcpIqrEj9l4_B_ncw_EsEyRY",
 									"type": "string"
 								}
 							]
@@ -547,23 +581,23 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n\t\"nom\": \"jean\",\n\t\"prenom\": \"christophe1\",\n\t\"email\": \"cljeall@gmail.fr\",\n\t\"poste\":\"home de menage\",\n\t\"telephone\":\"0654254599\"\n}"
+							"raw": "{\n\t\"nom\": \"jean\",\n\t\"prenom\": \"christophe\",\n\t\"email\": \"cljeall@gmail.fr\",\n\t\"poste\":\"home de menage\",\n\t\"telephone\":\"0654254599\"\n}"
 						},
 						"url": {
-							"raw": "{{url}}/employee/update/24",
+							"raw": "{{url}}/employee/update/192",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"employee",
 								"update",
-								"24"
+								"192"
 							]
 						}
 					},

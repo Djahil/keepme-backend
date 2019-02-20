@@ -28,11 +28,9 @@ class EmployeeController extends AbstractController
 {
     private $userRepository;
 
-
     public function  __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-
     }
 
     /**
@@ -79,15 +77,37 @@ class EmployeeController extends AbstractController
     }
 
     /**
-     * @Route("/show/{slug}", name="employee_show", methods={"GET"})
+     * @Route("/show", name="employee_show", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function getEmployeeBySlug ($slug, EmployeeRepository $employeeRepository)
+    public function getEmployee(Request $request, EmployeeRepository $employeeRepository)
     {
-        $employee = $employeeRepository->findOneBy(['slug' => $slug]);
+        $content = $request->getContent();
+
+        $data = json_decode($content, true);
+
+        $employee = $employeeRepository->findOneBy($data);
+
         $connectedUser = $this->getUser();
         $userOfEmployee = $employee->getUser();
+
+        if($connectedUser !== $userOfEmployee)
+        {
+            throw new Error('operation not allowed');
+        }
+        $employee = [
+            'nom' => $employee->getNom(),
+            'prenom' => $employee->getPrenom(),
+            'email' => $employee->getEmail(),
+            'poste' => $employee->getPoste(),
+            'telephone' => $employee->getTelephone(),
+            'slug' => $employee->getSlug(),
+            'user' => [
+                $employee->getUser()->getNomEntreprise(),
+                $employee->getUser()->getLogo()
+            ]
+        ];
 
         if($connectedUser !== $userOfEmployee)
         {
@@ -114,13 +134,32 @@ class EmployeeController extends AbstractController
      * @Route("/list", name="employee_list", methods={"GET"})
      * @return JsonResponse
      */
-    public function getEmployeesList ()
+    public function getEmployeesList (UserRepository $userRepository)
     {
-        $user = $this->getUser();
+        $employeeList = [];
+        $connectedUser = $this->getUser();
+        $user = $userRepository->find($connectedUser);
         $employees = $user->getEmployees();
 
+        foreach ($employees as $employee)
+        {
+            $employee = [
+                'nom' => $employee->getNom(),
+                'prenom' => $employee->getPrenom(),
+                'email' => $employee->getEmail(),
+                'poste' => $employee->getPoste(),
+                'telephone' => $employee->getTelephone(),
+                'slug' => $employee->getSlug(),
+                'user' => [
+                    $employee->getUser()->getNomEntreprise(),
+                    $employee->getUser()->getLogo()
+                ]
+            ];
 
-        $data = $this->get('serializer')->serialize($employees, 'json');
+            array_push($employeeList, $employee);
+        }
+
+        $data = $this->get('serializer')->serialize($employeeList, 'json');
 
         return new JsonResponse($data, 200, [], true);
     }
@@ -151,18 +190,17 @@ class EmployeeController extends AbstractController
 
 
     /**
-     * @Route("/update/{id}", name="employee_update", methods={"PUT"}, requirements={"page"="\d+"})
+     * @Route("/update/{employeeId}", name="employee_update", methods={"PUT"}, requirements={"employeeId"="\d+"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function updateEmployee (Request $request, EmployeeRepository $employeeRepository, $id)
+    public function updateEmployee (Request $request, EmployeeRepository $employeeRepository, $employeeId)
     {
         $content = $request->getContent();
         $entityManager = $this->getDoctrine()->getManager();
-        //$id = $_GET["id"];
         $myData = json_decode($content, true);
 
-        $employee = $employeeRepository->find($id);
+        $employee = $employeeRepository->find($employeeId);
         $user = $employee->getUser();
         $currentUser =$this->getUser();
 
