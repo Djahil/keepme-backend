@@ -191,7 +191,7 @@ class EmployeeController extends AbstractController
                 'employeePrenom' => $employee->getPrenom(),
                 'userPrenom' => $employee->getUser()->getPrenom(),
                 'userNom' => $employee->getUser()->getNom(),
-                'slug' => "http://127.0.0.1:8000/card/".$employee->getSlug()
+                'slug' => "http://localhost:3000/card/".$employee->getSlug()
             ]);
 
             $userMailData =
