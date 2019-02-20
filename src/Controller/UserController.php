@@ -6,21 +6,25 @@ use App\Entity\User;
 use App\Form\InscriptionType;
 use App\Service\EmailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class InscriptionController extends AbstractController
+/**
+ * @Route("/user")
+ * Class InscriptionController
+ * @package App\Controller
+ */
+class UserController extends AbstractController
 {
     /**
-     * @Route("/inscription", name="inscription", methods={"POST"})
+     * @Route("/add", name="user_add", methods={"POST"})
      * @param Request $request
      * @return Response
      */
-    public function inscription (Request $request, EmailService $mailService, UserPasswordEncoderInterface $encoder): Response
+    public function addUser (Request $request, EmailService $mailService, UserPasswordEncoderInterface $encoder): Response
     {
         $user     = new User();
         $form     = $this->createForm(InscriptionType::class, $user);
