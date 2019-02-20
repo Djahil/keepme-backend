@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\EmployeeType;
 use App\Repository\EmployeeRepository;
 use App\Repository\UserRepository;
+use App\Service\EmailService;
 use PhpParser\Error;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\Tests\Compiler\E;
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Utils\Validator;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Flex\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/employee")
@@ -168,6 +169,43 @@ class EmployeeController extends AbstractController
 
     }
 
+    /**
+     * @Route("/sendcard", name="employee_send_card", methods={"POST"})
+     * @param Request $request
+     * @param EmailService $emailService
+     * @param EmployeeRepository $employeeRepository
+     * @return JsonResponse|Response
+     */
+    public function sendCardByMail(Request $request, EmailService $emailService, EmployeeRepository $employeeRepository)
+    {
+        $formValues = json_decode($request->getContent(), true);
+        $slug = $formValues['slug'];
+        $employee = $employeeRepository->findOneBySlug($slug);
+        /* $form = $this->createForm(EmployeeType::class, $employee);
+        $form->handleRequest($request);
+        $form->submit($formValues);*/
 
+        if ($employee != null)
+        {
+            $body = $this->renderView('EmailTemplate/carteVisite.html.twig', [
+                'employeePrenom' => $employee->getPrenom(),
+                'userPrenom' => $employee->getUser()->getPrenom(),
+                'userNom' => $employee->getUser()->getNom(),
+                'slug' => "http://127.0.0.1:8000/card/".$employee->getSlug()
+            ]);
 
+            $userMailData =
+                [
+                    "from" => "hoc2019@ld-web.net",
+                    "to" => $employee->getEmail(),
+                    "subject" => "KeepMe : votre carte de visite numérique",
+                    "body" => $body,
+                ];
+            return new Response($emailService->sendEmail($userMailData));
+        }
+        else
+        {
+            return new Response("Cet(te) employé(e) n'existe pas");
+        }
+    }
 }
