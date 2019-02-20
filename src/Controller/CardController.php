@@ -32,10 +32,8 @@ class CardController extends AbstractController
             'poste' => $employee->getPoste(),
             'telephone' => $employee->getTelephone(),
             'slug' => $slug,
-            'user' => [
-                $employee->getUser()->getNomEntreprise(),
-                $employee->getUser()->getLogo()
-            ]
+            'entreprise' => $employee->getUser()->getNomEntreprise(),
+            'logo' => $employee->getUser()->getLogo()
         ];
 
         $data = $this->get('serializer')->serialize($employee, 'json');
