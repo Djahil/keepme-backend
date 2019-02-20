@@ -38,6 +38,7 @@ class InscriptionController extends AbstractController
 
         // Si le formulaire et submit et valide tu me l'envoi en base de donnée
         if ($form->isSubmitted() && $form->isValid())
+        {
             $user->setRoles(['ROLE_USER']);
             $user->setPassword($encoded);
 
