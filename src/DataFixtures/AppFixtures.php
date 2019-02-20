@@ -47,8 +47,8 @@ class AppFixtures extends Fixture
         $user->setEmail($faker->email);
         $user->setRoles(['ROLE_USER']);
         $user->setPassword($this->encoder->encodePassword($admin, 'password'));
-        $user->setNom($faker->name);
-        $user->setPrenom($faker->name);
+        $user->setNom($faker->lastName);
+        $user->setPrenom($faker->firstName);
         $user->setNomEntreprise($faker->company);
         $user->setLogo($faker->imageUrl($width = 640, $height = 480));
         $user->setAdresse($faker->streetAddress);
@@ -65,8 +65,8 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 10; $i++) {
             $employee = new Employee();
-            $employee->setNom($faker->name);
-            $employee->setPrenom($faker->name);
+            $employee->setNom($faker->lastName);
+            $employee->setPrenom($faker->firstName);
             $employee->setEmail($faker->email);
             $employee->setPoste($faker->jobTitle);
             $employee->setTelephone($faker->phoneNumber);
