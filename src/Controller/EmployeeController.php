@@ -96,6 +96,7 @@ class EmployeeController extends AbstractController
         {
             throw new Error('operation not allowed');
         }
+
         $employee = [
             'nom' => $employee->getNom(),
             'prenom' => $employee->getPrenom(),
@@ -107,22 +108,6 @@ class EmployeeController extends AbstractController
                 $employee->getUser()->getNomEntreprise(),
                 $employee->getUser()->getLogo()
             ]
-        ];
-
-        if($connectedUser !== $userOfEmployee)
-        {
-            throw new Error('operation not allowed');
-        }
-        $employee = [
-            'nom' => $employee->getNom(),
-            'prenom' => $employee->getPrenom(),
-            'email' => $employee->getEmail(),
-            'poste' => $employee->getPoste(),
-            'slug' => $slug,
-            'user' => [
-                $employee->getUser()->getNomEntreprise(),
-                $employee->getUser()->getLogo()
-                        ]
         ];
 
         $data = $this->get('serializer')->serialize($employee, 'json', ['groups' => "empl"]);
