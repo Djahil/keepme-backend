@@ -8,11 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource
+ * @Vich\Uploadable
  */
 class User implements UserInterface
 {
@@ -67,11 +69,6 @@ class User implements UserInterface
     private $nom_entreprise;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $logo;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotNull
      * @Assert\NotBlank
@@ -114,6 +111,36 @@ class User implements UserInterface
      * )
      */
     private $telephone;
+
+    /**
+     * @Vich\UploadableField(mapping="logo")
+     */
+    private $logo;
+
+    /**
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    private $updatedAt;
+
+    /**
+     * @return mixed
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     *  @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $logo
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+
+        if (null !== $logo) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
 
     public function __construct()
     {
@@ -230,18 +257,6 @@ class User implements UserInterface
     public function setNomEntreprise(string $nom_entreprise): self
     {
         $this->nom_entreprise = $nom_entreprise;
-
-        return $this;
-    }
-
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(string $logo): self
-    {
-        $this->logo = $logo;
 
         return $this;
     }

@@ -10,15 +10,12 @@ use App\Repository\UserRepository;
 use App\Service\EmailService;
 use PhpParser\Error;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\DependencyInjection\Tests\Compiler\E;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 
 /**
@@ -81,7 +78,7 @@ class EmployeeController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getEmployee(Request $request, EmployeeRepository $employeeRepository)
+    public function getEmployee(Request $request, EmployeeRepository $employeeRepository, UploaderHelper $helper)
     {
         $content = $request->getContent();
 
@@ -104,13 +101,11 @@ class EmployeeController extends AbstractController
             'poste' => $employee->getPoste(),
             'telephone' => $employee->getTelephone(),
             'slug' => $employee->getSlug(),
-            'user' => [
-                $employee->getUser()->getNomEntreprise(),
-                $employee->getUser()->getLogo()
-            ]
+            'entreprise' => $employee->getUser()->getNomEntreprise(),
+            'logo' => $helper->asset($userOfEmployee, 'logo')
         ];
 
-        $data = $this->get('serializer')->serialize($employee, 'json', ['groups' => "empl"]);
+        $data = $this->get('serializer')->serialize($employee, 'json');
 
         return new JsonResponse($data, 200, [], true);
     }
@@ -119,7 +114,7 @@ class EmployeeController extends AbstractController
      * @Route("/list", name="employee_list", methods={"GET"})
      * @return JsonResponse
      */
-    public function getEmployeesList (UserRepository $userRepository)
+    public function getEmployeesList (UserRepository $userRepository, UploaderHelper $helper)
     {
         $employeeList = [];
         $connectedUser = $this->getUser();
@@ -135,10 +130,8 @@ class EmployeeController extends AbstractController
                 'poste' => $employee->getPoste(),
                 'telephone' => $employee->getTelephone(),
                 'slug' => $employee->getSlug(),
-                'user' => [
-                    $employee->getUser()->getNomEntreprise(),
-                    $employee->getUser()->getLogo()
-                ]
+                'entreprise' => $employee->getUser()->getNomEntreprise(),
+                'logo' => $helper->asset($employee, 'logo')
             ];
 
             array_push($employeeList, $employee);

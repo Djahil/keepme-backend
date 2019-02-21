@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * @Route("/user")
@@ -28,14 +29,14 @@ class UserController extends AbstractController
     {
         $user     = new User();
         $form     = $this->createForm(InscriptionType::class, $user);
-        $content  = $request->getContent();
-        $data     = json_decode($content, true);
+        $datas  = $request->request->all();
         $em       = $this->getDoctrine()->getManager();
-        $encoded  = $encoder->encodePassword($user, $data['password']);
+        $encoded  = $encoder->encodePassword($user, $datas['password']);
+        $file = $request->files;
         
         // On catch l'erreur si il y'en a une
         try {
-            $form->submit($data);
+            $form->submit($datas);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'ça ne marche pas']);
         }
@@ -45,6 +46,10 @@ class UserController extends AbstractController
         {
             $user->setRoles(['ROLE_USER']);
             $user->setPassword($encoded);
+            if($file != null)
+            {
+                $user->setLogo($file);
+            }
 
             $em->persist($user);
             $em->flush();

@@ -4,11 +4,10 @@ namespace App\Controller;
 
 
 use App\Repository\EmployeeRepository;
-use PhpParser\Error;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 
 /**
@@ -16,12 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CardController extends AbstractController
 {
-
     /**
      * @Route("/{slug}", name="card_employee", methods={"GET"})
      * @return JsonResponse
      */
-    public function getEmployeeForGeneratingCard($slug, EmployeeRepository $employeeRepository)
+    public function getEmployeeForGeneratingCard($slug, EmployeeRepository $employeeRepository, UploaderHelper $helper)
     {
         $employee = $employeeRepository->findOneBy(['slug' => $slug]);
 
@@ -33,7 +31,7 @@ class CardController extends AbstractController
             'telephone' => $employee->getTelephone(),
             'slug' => $slug,
             'entreprise' => $employee->getUser()->getNomEntreprise(),
-            'logo' => $employee->getUser()->getLogo()
+            'logo' => $helper->asset($employee->getUser(), 'logo')
         ];
 
         $data = $this->get('serializer')->serialize($employee, 'json');

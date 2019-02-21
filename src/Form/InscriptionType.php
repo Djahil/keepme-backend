@@ -24,7 +24,7 @@ class InscriptionType extends AbstractType
             ->add('nom_entreprise', TextType::class)
             ->add('adresse', TextType::class)
             ->add('ville', TextType::class)
-            ->add('logo')
+            ->add('logo', FileType::class)
             ->add('code_postal', TextType::class)
             ->add('site_web', TextType::class)
             ->add('social', TextType::class)

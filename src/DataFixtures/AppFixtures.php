@@ -50,7 +50,8 @@ class AppFixtures extends Fixture
         $user->setNom($faker->lastName);
         $user->setPrenom($faker->firstName);
         $user->setNomEntreprise($faker->company);
-        $user->setLogo($faker->imageUrl($width = 640, $height = 480));
+        //$user->setLogo($faker->imageUrl($width = 640, $height = 480));
+        $user->setLogo($faker->image($width = 640, $height = 480));
         $user->setAdresse($faker->streetAddress);
         $user->setCodePostal($faker->postcode);
         $user->setVille($faker->city);
