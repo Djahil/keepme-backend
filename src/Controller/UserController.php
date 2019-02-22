@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\InscriptionType;
+use App\Repository\UserRepository;
+use App\Form\UserType;
 use App\Service\EmailService;
+use Error;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +17,19 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * @Route("/user")
- * Class InscriptionController
+ * Class UserController
  * @package App\Controller
  */
 class UserController extends AbstractController
 {
+    // CRUD
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * @Route("/add", name="user_add", methods={"POST"})
      * @param Request $request
@@ -28,11 +38,11 @@ class UserController extends AbstractController
     public function addUser (Request $request, EmailService $mailService, UserPasswordEncoderInterface $encoder): Response
     {
         $user     = new User();
-        $form     = $this->createForm(InscriptionType::class, $user);
+        $form     = $this->createForm(UserType::class, $user);
         $datas  = $request->request->all();
         $em       = $this->getDoctrine()->getManager();
         $encoded  = $encoder->encodePassword($user, $datas['password']);
-        $file = $request->files;
+        $file = $request->files->get('logo');
         
         // On catch l'erreur si il y'en a une
         try {
@@ -61,107 +71,28 @@ class UserController extends AbstractController
         return new JsonResponse($data, 200, [], true);
     }
 
-    protected function sendInscriptionConfirmation(User $data, EmailService $emailService)
-    {
-        $body = $this->renderView('EmailTemplate/inscription.html.twig', [
-            'prenom' => $data->getPrenom()
-        ]);
-
-        $userMailData =
-            [
-                "from" => "hoc2019@ld-web.net",
-                "to" => $data->getEmail(),
-                "subject" => "Bienvenue sur KeepMe !",
-                "body" => $body,
-            ];
-
-        return new Response($emailService->sendEmail($userMailData));
-    }
-
-    // CRUD
-    private $userRepository;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     * @Route("/add", name="user_add", methods={"POST"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function add(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $content = $request->getContent();
-
-        $data = json_decode($content, true);
-        $user = $this->getUser();
-
-        if (!$user instanceof User) {
-            throw new Error('No User found');
-        }
-
-
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-
-        try {
-            $form->submit($data);
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage(), 500);
-        }
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $user = $form->getData();
-            $user->setUser($user);
-            $em->persist($user);
-            $em->flush();
-
-        }
-        $data = $this->get('serializer')->serialize($user, 'json');
-
-        return new JsonResponse($data, 200, [], true);
-
-    }
-
     /**
      * @Route("/show", name="user_show", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function getUser(Request $request, UserRepository $userRepository)
+    public function getConnectedUser(UploaderHelper $helper)
     {
-        $content = $request->getContent();
-
-        $data = json_decode($content, true);
-
-        $user = $userRepository->findOneBy($data);
-
-        $connectedUser = $this->getUser();
-        $userOfUser = $user->getUser();
-
-        if ($connectedUser !== $userOfUser) {
-            throw new Error('operation not allowed');
-        }
+        $user = $this->getUser();
 
         $user = [
             'nom' => $user->getNom(),
             'prenom' => $user->getPrenom(),
             'email' => $user->getEmail(),
             'telephone' => $user->getTelephone(),
-            'nom_entreprise' => $user->getNomEntreprise(),
+            'entreprise' => $user->getNomEntreprise(),
             'adresse' => $user->getAdresse(),
             'code_postal' => $user->getCodePostal(),
             'ville' => $user->getVille(),
-            'logo' => $user->getLogo(),
+            'logo' => $helper->asset($user, 'logo'),
             'password' => $user->getPassword(),
             'social' => $user->getSocial(),
-            'site_web' => $user->getSiteWeb(),
-            'slug' => $user->getSlug()
+            'site_web' => $user->getSiteWeb()
         ];
 
         $data = $this->get('serializer')->serialize($user, 'json');
@@ -196,35 +127,44 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/update/{userId}", name="user_update", methods={"PUT"}, requirements={"userId"="\d+"})
+     * @Route("/update", name="user_update", methods={"POST"})
      * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
      * @return JsonResponse
+     * @throws Error
      */
-    public function updateUser(Request $request, UserRepository $userRepository, $userId)
+    public function updateUser(Request $request, UserPasswordEncoderInterface $encoder)
     {
-        $content = $request->getContent();
+        $datas = $request->request->all();
+        $user = $this->getUser();
+        $file = $request->files->get('logo');
+
         $entityManager = $this->getDoctrine()->getManager();
-        $myData = json_decode($content, true);
 
-        $users = $userRepository->find($userId);
-        $user = $user->getUser();
-        $currentUser = $this->getUser();
-
-        if ($users !== $currentUser) {
+        if ($user == null) {
             throw new Error('update is refused');
         }
 
         $form = $this->createForm(UserType::class, $user);
 
         try {
-            $form->submit($myData);
+            $form->submit($datas);
         } catch (\Exception $e) {
             throw new Error('error');
         }
 
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $encoded  = $encoder->encodePassword($user, $datas['password']);
+
             $user = $form->getData();
+
+            $user->setPassword($encoded);
+
+            if($file != null)
+            {
+                $user->setLogo($file);
+            }
+
             $entityManager->flush();
         }
 
@@ -232,6 +172,23 @@ class UserController extends AbstractController
 
         return new JsonResponse($data, 200, [], true);
 
+    }
+
+    protected function sendInscriptionConfirmation(User $data, EmailService $emailService)
+    {
+        $body = $this->renderView('EmailTemplate/inscription.html.twig', [
+            'prenom' => $data->getPrenom()
+        ]);
+
+        $userMailData =
+            [
+                "from" => "hoc2019@ld-web.net",
+                "to" => $data->getEmail(),
+                "subject" => "Bienvenue sur KeepMe !",
+                "body" => $body,
+            ];
+
+        return new Response($emailService->sendEmail($userMailData));
     }
 
 

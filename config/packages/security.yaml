@@ -17,7 +17,6 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-
         login:
 
             pattern:  ^/api/login
@@ -34,12 +33,21 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+
+        user:
+            pattern:   ^\/user\/(?!add)\w+
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
         employee:
             pattern:   ^/employee
             stateless: true
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+
         main:
             anonymous: true
 
@@ -59,6 +67,9 @@ security:
       - { path: ^/admin, roles: ROLE_ADMIN }
       - { path: ^/profile, roles: ROLE_USER }
       - { path: ^/employee, roles: ROLE_USER }
+      - { path: ^/user/show, roles: ROLE_USER }
+      - { path: ^/user/delete, roles: ROLE_USER }
+      - { path: ^/user/update, roles: ROLE_USER }
 
 
 

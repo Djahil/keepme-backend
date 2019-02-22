@@ -113,14 +113,35 @@ class User implements UserInterface
     private $telephone;
 
     /**
-     * @Vich\UploadableField(mapping="logo")
+     * @Vich\UploadableField(mapping="logo", fileNameProperty="logoName")
      */
     private $logo;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $logoName;
 
     /**
      * @ORM\Column(type="datetime", nullable = true)
      */
     private $updatedAt;
+
+    /**
+     * @return mixed
+     */
+    public function getLogoName()
+    {
+        return $this->logoName;
+    }
+
+    /**
+     * @param mixed $logoName
+     */
+    public function setLogoName($logoName)
+    {
+        $this->logoName = $logoName;
+    }
 
     /**
      * @return mixed
