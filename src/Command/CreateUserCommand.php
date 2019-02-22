@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: adminHOC
- * Date: 12/02/2019
- * Time: 16:37
- */
-
 namespace App\Command;
 
 use App\Repository\UserRepository;
@@ -15,24 +8,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-
-
-
 class CreateUserCommand extends Command
 {
-
-
     protected static $defaultName = 'app:create-user';
+    private $userRepository;
 
-    private $users;
-
-    public function __construct(UserRepository $users)
+    public function __construct(UserRepository $userRepository)
     {
-
-        $this->users = $users;
+        $this->userRepository = $userRepository;
         parent::__construct();
     }
-
 
     /**
      * Configurations
@@ -40,7 +25,6 @@ class CreateUserCommand extends Command
     protected function configure()
     {
         $this
-
             ->setDescription('Creates a new user.')
             ->setHelp('This command allows you to create a user...')
             ->addArgument('username', InputArgument::REQUIRED, 'user name login')
@@ -61,7 +45,7 @@ class CreateUserCommand extends Command
 
 
         if (!empty($username) && !empty($plainPassword)) {
-            $this->users->createAdminFromCommand(
+            $this->userRepository->createAdminFromCommand(
                 $username,
                 $plainPassword
             );
@@ -72,13 +56,8 @@ class CreateUserCommand extends Command
                 .$plainPassword));
 
             $io->note("pour remplacer l'utilisateur,  veuillez vous connecter à phpmyadmin et le supprimer puis rejouez la commande\"");
-
         }else{
             throw new \RuntimeException("<options=bold>you password or your login is empty</>");
         }
-
-
     }
-
-
 }

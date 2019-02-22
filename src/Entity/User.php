@@ -30,7 +30,6 @@ class User implements UserInterface
      * @Assert\Email(
      *     message = "'{{ value }}' n'est pas un email valide."
      * )
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $email;
@@ -42,49 +41,42 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $nom_entreprise;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $code_postal;
   
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotNull
      * @Assert\NotBlank
      */
     private $ville;

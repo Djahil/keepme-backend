@@ -39,10 +39,11 @@ class UserController extends AbstractController
     {
         $user     = new User();
         $form     = $this->createForm(UserType::class, $user);
-        $datas  = $request->request->all();
+        $datas    = $request->request->all();
         $em       = $this->getDoctrine()->getManager();
+        // Génération du mot de passe => à automatiser (externaliser)
         $encoded  = $encoder->encodePassword($user, $datas['password']);
-        $file = $request->files->get('logo');
+        $file     = $request->files->get('logo');
         
         // On catch l'erreur si il y'en a une
         try {
@@ -54,6 +55,11 @@ class UserController extends AbstractController
         // Si le formulaire et submit et valide tu me l'envoi en base de donnée
         if ($form->isSubmitted() && $form->isValid())
         {
+            // Envisager de déporter l'assignation du rôle dans un listener Doctrine
+            // On sépare donc la logique de rôle utilisateur de la création qui se trouve dans le contrôleur
+            // Et si on a une création d'utilisateur à un autre endroit plus tard,
+            // notre logique reste centralisée dans un listener externe
+            // Veiller à respecter aussi la création d'administrateur (dans la commande Symfony, app:create-user), il ne faut pas qu'ils rentrent en conflit ou s'écrasent
             $user->setRoles(['ROLE_USER']);
             $user->setPassword($encoded);
             if($file != null)
@@ -64,8 +70,17 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
+            // Idée d'évolution : transformer cette instruction en un événement personnalisé
+            // Type : USER_CREATED
+            // Ensuite, un listener branché sur cet événement pourrait envoyer automatiquement un mail
+            // Et on pourrait brancher autant de listener qu'on voudrait à la création d'un utilisateur
+            // Suivant l'évolution des besoins de l'application
             $this->sendInscriptionConfirmation($user, $mailService);
         }
+
+        // Changer la réponse => "OK" ou autre message que le client pourrait récupérer et afficher
+        // à l'utilisateur
+        // Pour renvoyer du JSON, voir également : https://symfony.com/doc/current/controller.html#returning-json-response
         $data = $this->get('serializer')->serialize($user, 'json');
 
         return new JsonResponse($data, 200, [], true);
@@ -182,7 +197,7 @@ class UserController extends AbstractController
 
         $userMailData =
             [
-                "from" => "hoc2019@ld-web.net",
+                "from" => "hoc2019@ld-web.net", // Envisager de sortir cette valeur dans une variable d'environnement
                 "to" => $data->getEmail(),
                 "subject" => "Bienvenue sur KeepMe !",
                 "body" => $body,
@@ -190,6 +205,4 @@ class UserController extends AbstractController
 
         return new Response($emailService->sendEmail($userMailData));
     }
-
-
 }

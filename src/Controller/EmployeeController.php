@@ -43,8 +43,7 @@ class EmployeeController extends AbstractController
         $data = json_decode($content, true);
         $user = $this->getUser();
     
-        if (!$user instanceof User)
-        {
+        if (!$user instanceof User) {
             throw new Error('No User found');
         }
 
@@ -83,7 +82,6 @@ class EmployeeController extends AbstractController
         $content = $request->getContent();
 
         $data = json_decode($content, true);
-
         $employee = $employeeRepository->findOneBy($data);
 
         $connectedUser = $this->getUser();
@@ -94,6 +92,8 @@ class EmployeeController extends AbstractController
             throw new Error('operation not allowed');
         }
 
+        // Possibilité de factoriser ce code dans l'entité Employee directement
+        // On pourrait en bénéficier partout
         $employee = [
             'nom' => $employee->getNom(),
             'prenom' => $employee->getPrenom(),
@@ -117,12 +117,14 @@ class EmployeeController extends AbstractController
     public function getEmployeesList (UserRepository $userRepository, UploaderHelper $helper)
     {
         $employeeList = [];
+        // getUser retourne déjà une entité
         $connectedUser = $this->getUser();
         $user = $userRepository->find($connectedUser);
         $employees = $user->getEmployees();
 
         foreach ($employees as $employee)
         {
+            // Factoriser dans entité Employee
             $employee = [
                 'nom' => $employee->getNom(),
                 'prenom' => $employee->getPrenom(),
@@ -154,8 +156,8 @@ class EmployeeController extends AbstractController
 
         $myData = json_decode($content, true);
         $id = $myData['id'];
+        // Utiliser find(id)
         $employee = $employeeRepository->findOneBy(['id' => $id]);
-
 
         $entityManager->remove($employee);
         $entityManager->flush();
@@ -230,12 +232,13 @@ class EmployeeController extends AbstractController
                 'employeePrenom' => $employee->getPrenom(),
                 'userPrenom' => $employee->getUser()->getPrenom(),
                 'userNom' => $employee->getUser()->getNom(),
+                // Attention aux URL en dur dans l'application
                 'slug' => "http://localhost:3000/card/".$employee->getSlug()
             ]);
 
             $userMailData =
                 [
-                    "from" => "hoc2019@ld-web.net",
+                    "from" => "hoc2019@ld-web.net", // <-- externaliser dans variable d'environnement
                     "to" => $employee->getEmail(),
                     "subject" => "KeepMe : votre carte de visite numérique",
                     "body" => $body,
